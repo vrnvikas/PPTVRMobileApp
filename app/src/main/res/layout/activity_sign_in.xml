@@ -1,0 +1,61 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:adjustViewBounds="true"
+    android:gravity="center"
+    android:keepScreenOn="true"
+    android:scaleType="fitXY"
+    android:background="@drawable/login_background"
+    tools:context="com.smis.pptvr.pptvrmobileapp.SignInActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <ImageView
+        android:id="@+id/fullscreen_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:src="@drawable/login_background" />
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+
+    <LinearLayout
+        android:id="@+id/fullscreen_content_controls"
+        style="?metaButtonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+        <ImageButton
+            android:id="@+id/ibFbSignin"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/btnfb"
+            android:scaleType="fitCenter"
+            android:background="@color/com_facebook_blue"
+            android:minHeight="50dp" />
+
+        <ImageButton
+            android:id="@+id/ibGoogleSignin"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            android:scaleType="fitCenter"
+            android:background="@color/google_sign_in_red"
+            android:src="@drawable/btngoogle"
+            android:minHeight="50dp" />
+
+    </LinearLayout>
+
+
+</FrameLayout>
