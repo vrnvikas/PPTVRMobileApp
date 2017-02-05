@@ -37,6 +37,8 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.android.support:customtabs:25.1.1'
     compile 'org.glassfish.main:javax.annotation:4.0-b33'
+    compile 'com.github.arimorty:floatingsearchview:2.0.3'
+    compile 'com.github.vlad1m1r990:Lemniscate:1.1.0'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

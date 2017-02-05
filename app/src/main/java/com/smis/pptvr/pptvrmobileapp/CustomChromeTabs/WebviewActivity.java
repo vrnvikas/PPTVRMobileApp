@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.smis.pptvr.pptvrmobileapp;
+package com.smis.pptvr.pptvrmobileapp.CustomChromeTabs;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.smis.pptvr.pptvrmobileapp.R;
 
 /**
  * This Activity is used as a fallback when there is no browser installed that supports

@@ -8,6 +8,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -17,7 +18,7 @@ import retrofit2.http.Query;
 
 public interface WebService {
 
-    @GET("/RetrofitExample/books.json")
-    public void getProjects(Call<List<Projects>> response);
+    @GET(Endpoints.BASE_URL + "projects/all/{user}")
+    Call<List<Projects>> getAllProjects(@Path("user") String user);
 
 }

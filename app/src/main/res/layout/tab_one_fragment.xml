@@ -5,9 +5,35 @@
     android:layout_height="match_parent"
     android:background="@color/fragment_bg">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <com.vlad1m1r.lemniscate.BernoullisProgressView
+        android:id="@+id/loding_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:duration="1000"
+        app:hasHole="false"
+        app:lineColor="@color/colorPrimary"
+        app:lineLength="0.6"
+        app:lineLengthChangeable="true"
+        app:maxLineLength="0.8"
+        app:minLineLength="0.4"
+        app:sizeMultiplier="1"
+        app:strokeWidth="5dp"
+        android:visibility="gone"/>
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </RelativeLayout>

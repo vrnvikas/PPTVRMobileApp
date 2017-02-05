@@ -11,12 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.smis.pptvr.pptvrmobileapp;
+package com.smis.pptvr.pptvrmobileapp.CustomChromeTabs;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import com.smis.pptvr.pptvrmobileapp.CustomChromeTabs.CustomTabActivityHelper;
 
 /**
  * A Fallback that opens a Webview when Custom Tabs is not available

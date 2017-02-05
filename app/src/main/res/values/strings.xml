@@ -1,19 +1,20 @@
 <resources>
-    <string name="app_name">PPTVRMobileApp</string>
+    <string name="app_name">PPTVR</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
 
-    <string name="title_activity_sign_in">SignInActivity</string>
+    <string name="title_activity_sign_in">PPTVRMobileApp</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-
+    <string name="facebook_app_id">996971813779819</string>
     <string name="label_action">Perform Action</string>
     <string name="action_button_toast_text">Action Button Clicked with URL: %s</string>
     <string name="menu_item_toast_text">Menu Item Clicked with URL: %s</string>
     <string name="toolbar_toast_text">Toolbar Clicked with URL: %s</string>
     <string name="unknown_toast_text">Unknown Action Clicked with URL: %s</string>
+    <string name="title_activity_webview">WebViewActivity</string>
 
 </resources>

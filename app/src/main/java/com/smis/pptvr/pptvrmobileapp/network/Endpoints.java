@@ -7,7 +7,7 @@ package com.smis.pptvr.pptvrmobileapp.network;
 public class Endpoints {
     public static final String USER_PROJECTS = "";
     public static final String PUBLIC_PROJECTS = "";
+    public static final String BASE_WEBLINK = "https://www.pptvr.in/#!/preview/";
 
-
-    public static final String BASE_URL = "www.pptvr.in";
+    public static final String BASE_URL = "https://sample-env.9ftkp7mv3d.ap-south-1.elasticbeanstalk.com/";
 }

@@ -3,32 +3,25 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/all_projects"
+            android:icon="@drawable/ic_list_black_24dp"
             android:title="All" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/most_viewed_projects"
             android:icon="@drawable/ic_menu_gallery"
             android:title="MostViewed" />
+
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Downloaded" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
+            android:id="@+id/starred_projects"
+            android:icon="@drawable/ic_stars_black_24dp"
             android:title="Starred" />
     </group>
 
     <item android:title="User">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="LogIn" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_exit_to_app_black_24dp"
                 android:title="LogOut" />
         </menu>
     </item>

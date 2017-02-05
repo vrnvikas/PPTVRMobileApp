@@ -1,43 +1,50 @@
 package com.smis.pptvr.pptvrmobileapp;
 
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.net.Uri;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.smis.pptvr.pptvrmobileapp.CustomChromeTabs.CustomTabActivityHelper;
 import com.smis.pptvr.pptvrmobileapp.TabFragments.TabOneFragment;
-import com.smis.pptvr.pptvrmobileapp.TabFragments.TabThreeFragment;
 import com.smis.pptvr.pptvrmobileapp.TabFragments.TabTwoFragment;
+import com.smis.pptvr.pptvrmobileapp.network.FilterChangeListener;
 
-import java.util.Comparator;
-import java.util.List;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    private Toolbar toolbar;
+    public FloatingSearchView toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private CustomTabActivityHelper mCustomTabActivityHelper;
+    private FilterChangeListener mListener;
+    public  NavigationView navigationView;
+    public TabOneFragment privateFragment;
+    public TabTwoFragment publicFragment;
+    private TextView tvUserName;
+    private TextView tvUserEmail;
 
     private int[] tabIcons = {
             R.drawable.ic_action_person,
@@ -49,19 +56,16 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar = (FloatingSearchView) findViewById(R.id.toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        toolbar.attachNavigationDrawerToMenuButton(drawer);
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
+        tvUserName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tvUserDisplayName);
+        tvUserEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tvUserEmail);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
@@ -69,11 +73,44 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(viewPager);
 
 
+
         mCustomTabActivityHelper = new CustomTabActivityHelper();
+
+//        mListener = (FilterChangeListener) getBaseContext();
+        final FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUser.getToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            Log.d("GoogleActivity","userToken: "+mUser.getDisplayName());
+                            // Send token to your backend via HTTPS
+
+                        } else {
+                            // Handle error -> task.getException();
+
+                        }
+                    }
+                });
+
+        tvUserName.setText(mUser.getDisplayName());
+        if(mUser.getEmail() != null){
+            tvUserEmail.setText(mUser.getEmail());
+        }
 
 
     }
 
+
+    public FloatingSearchView getSearchView(){
+        return toolbar;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     @Override
     protected void onStart() {
@@ -88,10 +125,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupViewPager(ViewPager viewPager) {
+        privateFragment = new TabOneFragment();
+        publicFragment = new TabTwoFragment();
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TabOneFragment(), "One");
-        adapter.addFragment(new TabTwoFragment(), "Two");
-        adapter.addFragment(new TabThreeFragment(), "Three");
+        adapter.addFragment(privateFragment, "Private");
+        adapter.addFragment(publicFragment, "Public");
         viewPager.setAdapter(adapter);
 
     }
@@ -134,58 +172,23 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            openCustomTab();
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.all_projects) {
+            privateFragment.changeFilter("all");
+            publicFragment.changeFilter("all");
+        } else if (id == R.id.most_viewed_projects) {
+           privateFragment.changeFilter("most_viewed");
+            publicFragment.changeFilter("most_viewed");
+        } else if (id == R.id.starred_projects) {
+            privateFragment.changeFilter("most_starred");
+            publicFragment.changeFilter("most_starred");
+        } else if (id == R.id.logout) {
+            Intent myIntent = new Intent(this, SignInActivity.class);
+            myIntent.putExtra("initState","signout");
+            startActivity(myIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private void openCustomTab() {
-
-
-
-        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
-        //intentBuilder.setToolbarColor(Color.parseColor(String.valueOf(R.color.colorPrimary)));
-        //intentBuilder.setSecondaryToolbarColor(Color.parseColor(String.valueOf(R.color.colorPrimary)));
-
-        //Generally you do not want to decode bitmaps in the UI thread. Decoding it in the
-        //UI thread to keep the example short.
-        String actionLabel = getString(R.string.label_action);
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_menu_share);
-        PendingIntent pendingIntent = createPendingIntent(ActionBroadcastReceiver.ACTION_ACTION_BUTTON);
-        intentBuilder.setActionButton(icon, actionLabel, pendingIntent);
-
-        intentBuilder.addDefaultShareMenuItem();
-        intentBuilder.setShowTitle(true);
-
-        intentBuilder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left);
-        intentBuilder.setExitAnimations(this, android.R.anim.slide_in_left,
-                android.R.anim.slide_out_right);
-
-        CustomTabActivityHelper.openCustomTab(
-                this, intentBuilder.build(), Uri.parse("http://developer.android.com"), new WebviewFallback());
-    }
-
-
-    private PendingIntent createPendingIntent(int actionSourceId) {
-        Intent actionIntent = new Intent(
-                this.getApplicationContext(), ActionBroadcastReceiver.class);
-        actionIntent.putExtra(ActionBroadcastReceiver.KEY_ACTION_SOURCE, actionSourceId);
-        return PendingIntent.getBroadcast(
-                getApplicationContext(), actionSourceId, actionIntent, 0);
-    }
-
 }
