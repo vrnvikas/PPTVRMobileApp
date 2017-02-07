@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#333335</color>
-    <color name="colorPrimaryDark">#515154</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#263238</color>
+    <color name="colorPrimaryDark">#263238</color>
+    <color name="colorAccent">#546E7A</color>
     <color name="fragment_bg">#e5e5e5</color>
     <color name="black_overlay">#66000000</color>
     <color name="google_sign_in_red">#fa0c0c</color>
     <color name="white">#ffffff</color>
+    <color name="tab_indicator_color">#558B2F</color>
+    <color name="text_secondary_color">#D4D4D4</color>
+    <color name="text_primary_color">#263238</color>
 </resources>

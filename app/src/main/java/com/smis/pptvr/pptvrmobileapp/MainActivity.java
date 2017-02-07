@@ -1,5 +1,6 @@
 package com.smis.pptvr.pptvrmobileapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -32,6 +34,8 @@ import com.smis.pptvr.pptvrmobileapp.network.FilterChangeListener;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     public TabTwoFragment publicFragment;
     private TextView tvUserName;
     private TextView tvUserEmail;
+
 
     private int[] tabIcons = {
             R.drawable.ic_action_person,
@@ -93,10 +98,10 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-        tvUserName.setText(mUser.getDisplayName());
-        if(mUser.getEmail() != null){
-            tvUserEmail.setText(mUser.getEmail());
-        }
+
+        setUpUserNameAndEmail(mUser);
+
+
 
 
     }
@@ -124,15 +129,11 @@ public class MainActivity extends AppCompatActivity
         mCustomTabActivityHelper.unbindCustomTabsService(this);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        privateFragment = new TabOneFragment();
-        publicFragment = new TabTwoFragment();
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(privateFragment, "Private");
-        adapter.addFragment(publicFragment, "Public");
-        viewPager.setAdapter(adapter);
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
 
     @Override
     public void onBackPressed() {
@@ -191,4 +192,24 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void setupViewPager(ViewPager viewPager) {
+        privateFragment = new TabOneFragment();
+        publicFragment = new TabTwoFragment();
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(privateFragment, "Private");
+        adapter.addFragment(publicFragment, "Public");
+        viewPager.setAdapter(adapter);
+
+    }
+
+    private void setUpUserNameAndEmail(FirebaseUser mUser) {
+        tvUserName.setText(mUser.getDisplayName());
+        if(mUser.getEmail() != null){
+            tvUserEmail.setText(mUser.getEmail());
+            tvUserEmail.setEllipsize(TextUtils.TruncateAt.END);
+
+        }
+    }
+
 }

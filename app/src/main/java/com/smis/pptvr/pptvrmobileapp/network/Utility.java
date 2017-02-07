@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 
 import com.smis.pptvr.pptvrmobileapp.ActionBroadcastReceiver;
 import com.smis.pptvr.pptvrmobileapp.CustomChromeTabs.CustomTabActivityHelper;
@@ -64,7 +66,7 @@ public class Utility {
     public static void openCustomTab(Context context, String link) {
 
         CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
-        //intentBuilder.setToolbarColor(Color.parseColor(String.valueOf(R.color.colorPrimary)));
+        intentBuilder.setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary));
         //intentBuilder.setSecondaryToolbarColor(Color.parseColor(String.valueOf(R.color.colorPrimary)));
 
         //Generally you do not want to decode bitmaps in the UI thread. Decoding it in the

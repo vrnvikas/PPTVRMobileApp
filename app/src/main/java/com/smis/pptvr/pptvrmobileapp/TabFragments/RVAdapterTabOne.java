@@ -1,20 +1,22 @@
 package com.smis.pptvr.pptvrmobileapp.TabFragments;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.design.widget.Snackbar;
+import android.support.v4.net.ConnectivityManagerCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.smis.pptvr.pptvrmobileapp.R;
 import com.smis.pptvr.pptvrmobileapp.network.Endpoints;
 import com.smis.pptvr.pptvrmobileapp.network.Utility;
 import com.smis.pptvr.pptvrmobileapp.pojo.Projects;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +83,7 @@ public class RVAdapterTabOne extends RecyclerView.Adapter<RVAdapterTabOne.ItemVi
         public TextView tvProjectDes;
         public RelativeLayout projectContainer;
         public ImageButton ibShareWebLink;
-        public TextView tvStars;
+        //public TextView tvStars;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -91,11 +93,26 @@ public class RVAdapterTabOne extends RecyclerView.Adapter<RVAdapterTabOne.ItemVi
             tvProjectLetter = (TextView) itemView.findViewById(R.id.tvProjectLetter);
             projectContainer = (RelativeLayout) itemView.findViewById(R.id.projectTextContainer);
             ibShareWebLink = (ImageButton) itemView.findViewById(R.id.ibShareWebLink);
-            tvStars = (TextView) itemView.findViewById(R.id.stars);
+            //tvStars = (TextView) itemView.findViewById(R.id.stars);
             projectContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utility.openCustomTab(context, Endpoints.BASE_WEBLINK + projectsModel.get(getPosition()).getId());
+                    ConnectivityManager ConnectionManager=(ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo networkInfo=ConnectionManager.getActiveNetworkInfo();
+                    if(networkInfo != null && networkInfo.isConnected()) {
+                        Utility.openCustomTab(context, Endpoints.BASE_WEBLINK + projectsModel.get(getPosition()).getId());
+                    } else {
+                        Snackbar bar = Snackbar.make(view, "No Internet Connection", Snackbar.LENGTH_LONG)
+                                .setAction("Dismiss", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // Handle user action
+
+                                    }
+                                });
+                        bar.show();
+
+                    }
                 }
             });
 
@@ -106,14 +123,16 @@ public class RVAdapterTabOne extends RecyclerView.Adapter<RVAdapterTabOne.ItemVi
                 }
             });
 
-
         }
 
         public void bind(Projects project) {
-            name_TextView.setText(project.getProjectname());
-            tvProjectLetter.setText(project.getProjectname().substring(0,1));
+
+            name_TextView.setText(project.getProjectname().toString().substring(0,1).toUpperCase() +
+                    project.getProjectname().toString().substring(1));
+            name_TextView.setEllipsize(TextUtils.TruncateAt.END);
+            tvProjectLetter.setText(project.getProjectname().substring(0,1).toUpperCase());
             tvViews.setText(String.valueOf(project.getViews()));
-            tvStars.setText(String.valueOf(project.getStars()));
+            //tvStars.setText(String.valueOf(project.getStars()));
 
         }
 

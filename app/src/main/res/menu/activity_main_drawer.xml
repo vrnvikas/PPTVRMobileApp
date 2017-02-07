@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingPrefix">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/all_projects"
+            fontPath="fonts/Gotham-Medium.otf"
             android:icon="@drawable/ic_list_black_24dp"
             android:title="All" />
         <item
             android:id="@+id/most_viewed_projects"
             android:icon="@drawable/ic_menu_gallery"
+            fontPath="fonts/Gotham-Medium.otf"
             android:title="MostViewed" />
 
         <item
             android:id="@+id/starred_projects"
+            fontPath="fonts/Gotham-Medium.otf"
             android:icon="@drawable/ic_stars_black_24dp"
             android:title="Starred" />
     </group>
@@ -21,6 +26,7 @@
         <menu>
             <item
                 android:id="@+id/logout"
+                fontPath="fonts/Gotham-Medium.otf"
                 android:icon="@drawable/ic_exit_to_app_black_24dp"
                 android:title="LogOut" />
         </menu>

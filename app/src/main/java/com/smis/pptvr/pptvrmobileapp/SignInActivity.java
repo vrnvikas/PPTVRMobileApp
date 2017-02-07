@@ -227,8 +227,6 @@ public class SignInActivity extends BaseActivity  implements
             signOut();
         }
 
-        //signInGoogle();
-
     }
 
 
@@ -365,6 +363,7 @@ public class SignInActivity extends BaseActivity  implements
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
+
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -458,6 +457,7 @@ public class SignInActivity extends BaseActivity  implements
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
+                            LoginManager.getInstance().logOut();
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }

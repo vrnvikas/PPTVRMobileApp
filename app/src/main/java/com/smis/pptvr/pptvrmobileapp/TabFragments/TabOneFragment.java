@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -79,7 +81,7 @@ public class TabOneFragment extends Fragment implements SearchView.OnQueryTextLi
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         context = this;
         setHasOptionsMenu(true);
@@ -104,7 +106,20 @@ public class TabOneFragment extends Fragment implements SearchView.OnQueryTextLi
 
                 } else {
                     // Handle error -> task.getException();
+                    //Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
                     Log.d("GoogleActivity", "userToken: null");
+                    Snackbar bar = Snackbar.make(view, "No Internet Connection", Snackbar.LENGTH_LONG)
+                            .setAction("Dismiss", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // Handle user action
+
+                                }
+                            });
+
+                    if(getUserVisibleHint()){
+                        bar.show();
+                    }
                 }
             }
         });
@@ -113,8 +128,40 @@ public class TabOneFragment extends Fragment implements SearchView.OnQueryTextLi
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                final WebService service = Utility.createAppWebService(userIdToken);
-                service.getAllProjects(TAG_PRIVATE).enqueue(context);
+                FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+                mUser.getToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            userIdToken = task.getResult().getToken();
+                            Log.d("GoogleActivity", "userToken: " + userIdToken + " : ");
+                            // Send token to your backend via HTTPS
+                            final WebService service = Utility.createAppWebService(userIdToken);
+                            service.getAllProjects(TAG_PRIVATE).enqueue(context);
+
+                        } else {
+                            // Handle error -> task.getException();
+                            //Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
+                            Log.d("GoogleActivity", "userToken: null");
+                            Snackbar bar = Snackbar.make(view, "No Internet Connection", Snackbar.LENGTH_LONG)
+                                    .setAction("Dismiss", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            // Handle user action
+
+                                        }
+                                    });
+
+                            if(getUserVisibleHint()){
+                                bar.show();
+                            }
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    }
+                });
+//                if(userIdToken != null){
+//                    final WebService service = Utility.createAppWebService(userIdToken);
+//                    service.getAllProjects(TAG_PRIVATE).enqueue(context);
+//                }
             }
         });
 
@@ -229,6 +276,7 @@ public class TabOneFragment extends Fragment implements SearchView.OnQueryTextLi
 
     @Override
     public void onFailure(Call<List<Projects>> call, Throwable t) {
+        Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
         Log.d("GoogleActivity", "response project: failure" + t.toString());
     }
 
@@ -248,7 +296,7 @@ public class TabOneFragment extends Fragment implements SearchView.OnQueryTextLi
 
     @Override
     public void changeFilter(String filter) {
-        if(getUserVisibleHint()){
+        if(projectsList != null && getUserVisibleHint()){
             final List<Projects> filteredModelList = Utility.bubblesort(projectsList, filter);
             adapter.setFilter(filteredModelList);
         }

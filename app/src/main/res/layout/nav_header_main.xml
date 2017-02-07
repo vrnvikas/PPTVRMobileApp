@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingPrefix"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/nav_drawer_header"
@@ -14,25 +16,32 @@
 
     <ImageView
         android:id="@+id/ivUserProfilePic"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@drawable/app_nav_icon"
+        android:src="@drawable/nav_header_place_holder_user"
         />
 
     <TextView
         android:id="@+id/tvUserDisplayName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:textSize="18sp"
         android:text="Android Studio"
+        fontPath="fonts/Gotham-Bold.otf"
+        android:scrollHorizontally="true"
+        android:minLines="1"
+        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/tvUserEmail"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        fontPath="fonts/Gotham-Medium.otf"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:text="android.studio@android.com" />
 
 </LinearLayout>
